@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
+import { MarcasModule } from './marcas/marcas.module';
 
 @Module({
   imports: [
@@ -13,12 +14,13 @@ import { UsersModule } from './users/users.module';
       port: 5432,
       username: 'postgres',
       password: '12345678',
-      database: 'shop',
+      database: 'Store',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     ProductsModule,
     UsersModule,
+    MarcasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

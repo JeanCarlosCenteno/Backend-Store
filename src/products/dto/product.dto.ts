@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-validator';
 export class CreateProductDto {
   @IsNotEmpty()
   @IsNumber()
-  id: number;
+  id?: number;
   //los decoradores en el dto validan que la informacion agregada sea correcta
 
   @IsString()
