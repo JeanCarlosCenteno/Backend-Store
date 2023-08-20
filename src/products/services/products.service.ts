@@ -19,8 +19,19 @@ export class ProductService {
         return product;
     }
     //Encontrar un registro
-    findOne(id:number) {
-        return this.productRepo.findOneBy({ id });
+    //findOne(id:number) {
+        //return this.productRepo.findOneBy({ id });
+    //}
+
+    //Encontrar un registro con relaciones
+    findOne(id: number){
+        return this.productRepo.findOne({
+            where: { id },
+            relations: {
+                autor: true
+            },
+        });
+
     }
     //Mostrar todos los registros
     findAll(){
@@ -28,12 +39,14 @@ export class ProductService {
             order: { id: 'ASC' },
         });
     }
+
     //Eliminar un registro 
     async remove(id: number){
         const product = await this.findOne(id);
         await this.productRepo.remove(product);
         return 'Producto eliminado con exito!';
     }
+
     //Actualizar un producto
     async update(id: number, cambios: CreateProductDto){
         const oldProduct = await this.findOne(id);
