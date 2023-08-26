@@ -28,7 +28,9 @@ export class ProductService {
         return this.productRepo.findOne({
             where: { id },
             relations: {
-                autor: true
+                autor: true,
+                category: true,
+                proveedor: true,
             },
         });
 
