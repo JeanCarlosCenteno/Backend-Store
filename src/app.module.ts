@@ -23,6 +23,7 @@ import { FilesModule } from './files/files.module';
     UsersModule,
     MarcasModule,
     FilesModule,
+    
   ],
   controllers: [AppController],
   providers: [AppService],
