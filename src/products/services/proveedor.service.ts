@@ -42,7 +42,7 @@ export class ProveedorService {
     async remove(id: number) {
         const proveedor = await this.findOne(id);
         await this.proveedorRepo.remove(proveedor);
-        return 'Categoria eliminada satisfactoriamente '
+        return 'Proveedor eliminada satisfactoriamente '
     }
     //Actualizar un registro o producto
     async update (id: number, cambios: CreateProveedorDto){

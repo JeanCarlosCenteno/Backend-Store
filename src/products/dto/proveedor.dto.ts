@@ -18,5 +18,4 @@ export class CreateProveedorDto{
     @IsDate()
     @IsOptional()
     created_at: Date;
-2
 }
