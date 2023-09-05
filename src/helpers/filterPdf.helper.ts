@@ -13,7 +13,7 @@ export const pdffileFilter = (
 
     //Estas serian las extensiones validas para los archivos los que estan dentro del arreglo 
     //son los que vendran o los esperados
-    const validExtension = ['pdf'];
+    const validExtension = ['pdf','PDF'];
 
     //Si las extensiones validas incluyen la extension de archivo 
     if (validExtension.includes(fileExtension)) {
