@@ -17,5 +17,6 @@ export const fileNamer = (
     const fileNamer =  `${id()}.${fileExtension}`;
 
     //Retorna el nombre del archivo
-    callback(null, fileNamer);
+    callback(null, fileNamer, file);
+    
 };

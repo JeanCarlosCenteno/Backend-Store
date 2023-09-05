@@ -6,6 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { MarcasModule } from './marcas/marcas.module';
 import { FilesModule } from './files/files.module';
+import { pdfFilesModule } from './pdfFiles/pdfFiles.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FilesModule } from './files/files.module';
     UsersModule,
     MarcasModule,
     FilesModule,
+    pdfFilesModule,
     
   ],
   controllers: [AppController],
