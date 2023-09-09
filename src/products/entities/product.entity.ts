@@ -1,7 +1,8 @@
 import { Category } from './category.entity';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Proveedor } from './proveedor.entity';
+import { ProductImage } from './product-image.entity';
 
 @Entity()
 export class Product {
@@ -56,4 +57,10 @@ export class Product {
     referencedColumnName: 'id'
   })
   proveedor: Proveedor;
+
+  //Un producto puede tener muchas imagenes
+  @OneToMany(() => ProductImage, (productImage) => productImage.product,{
+      cascade: true,
+  }) 
+  images?: ProductImage[];
 }

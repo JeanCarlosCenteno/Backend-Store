@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from 'typeorm';
 import { CreateProductDto } from '../dto/product.dto';
+import { ProductImage } from '../entities/product-image.entity';
 
 
 @Injectable()
@@ -10,14 +11,34 @@ export class ProductService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepo: Repository<Product>,
-    ) {}
 
+        @InjectRepository(ProductImage)
+        private readonly productImageRepo: Repository<ProductImage>,
+    ) {}
+    /*
     async create(createProductDto: CreateProductDto) {
         const product = this.productRepo.create(createProductDto);
         await this.productRepo.save(product)
 
         return product;
+    }*/
+
+    //Crear un producto y agregar Imagenes //El ... Se refiere a exparcir
+
+    async create(ProductDto: CreateProductDto) {
+        const { images = [], ...detailsProducts } = ProductDto;
+
+        const product = await this.productRepo.create({
+            ...detailsProducts,
+            images: images.map((image) => 
+            this.productImageRepo.create({ url: image }),
+            ), 
+        });
+
+        await this.productRepo.save(product);
+        return product;
     }
+    
     //Encontrar un registro
     //findOne(id:number) {
         //return this.productRepo.findOneBy({ id });
@@ -50,9 +71,21 @@ export class ProductService {
     }
 
     //Actualizar un producto
-    async update(id: number, cambios: CreateProductDto){
+    /*async update(id: number, cambios: CreateProductDto){
         const oldProduct = await this.findOne(id);
         const updateProduct = await this.productRepo.merge(oldProduct, cambios);
         return this.productRepo.save(updateProduct);
-    }
+    } 
+    */
+   //Actualizar un producto con imagenes
+   async update(id: number, productDto: CreateProductDto){
+    const product = await this.productRepo.preload({
+       id: id,
+       ...productDto, //Para esparciar todos los datos del ProductDto
+       images:[] 
+    });
+
+    await this.productRepo.save(product);
+    return product;
+   }
 }
