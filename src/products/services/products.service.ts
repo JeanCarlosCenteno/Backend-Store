@@ -1,7 +1,7 @@
 import { Product } from './../entities/product.entity';
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from '../dto/product.dto';
 import { ProductImage } from '../entities/product-image.entity';
 
@@ -13,7 +13,9 @@ export class ProductService {
         private readonly productRepo: Repository<Product>,
 
         @InjectRepository(ProductImage)
-        private readonly productImageRepo: Repository<ProductImage>,
+        private readonly productImageRepo: Repository<ProductImage>,    
+
+        private readonly dataSource: DataSource,
     ) {}
     /*
     async create(createProductDto: CreateProductDto) {
@@ -60,6 +62,9 @@ export class ProductService {
     findAll(){
         return this.productRepo.find({
             order: { id: 'ASC' },
+            relations: {
+                images:true,
+            },
         });
     }
 
@@ -78,14 +83,39 @@ export class ProductService {
     } 
     */
    //Actualizar un producto con imagenes
-   async update(id: number, productDto: CreateProductDto){
+    async update(id: number, cambios: CreateProductDto){
+    const { images, ...updateAll } = cambios;
     const product = await this.productRepo.preload({
        id: id,
-       ...productDto, //Para esparciar todos los datos del ProductDto
-       images:[] 
+       ...updateAll, //Para esparciar todos los datos del ProductDto
     });
 
-    await this.productRepo.save(product);
+
+    //Empezamos a correr nuestro queryRunner, esto seria el punto de partida de nuestra transacción
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    if (images){  
+        //Si images no esta vacío, vamos a borrar las imagenes existentes
+        await queryRunner.manager.delete(ProductImage, { product: { id } });
+
+        //Aquí creamos nuevas imagenes del producto
+        product.images = images.map( (image) =>
+        this.productImageRepo.create( { url:image }),
+        );
+
+    } else {
+        product.images = await this.productImageRepo.findBy({ product: { id } });
+    }
+    
+    //Guardaremos el producto
+    await queryRunner.manager.save(product);
+
+    //Finalizamos la transacción y libraremos el queryRunner
+    await queryRunner.commitTransaction();
+    await queryRunner.release();
+    
     return product;
    }
 }

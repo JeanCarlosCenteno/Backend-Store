@@ -1,9 +1,6 @@
 import { Product } from './product.entity';
-import { Column, 
-        Entity, 
-        ManyToOne, 
-        PrimaryGeneratedColumn } 
-        from "typeorm";
+import { Column,Entity,ManyToOne, PrimaryGeneratedColumn } 
+from "typeorm";
 
 @Entity()
 export class ProductImage{
@@ -15,6 +12,8 @@ export class ProductImage{
 
     //Relacion product image a product
     //muchas imagenes tienen un producto
-    @ManyToOne(() => Product, (product) => product.images)
+    @ManyToOne(() => Product, (product) => product.images, {
+      onDelete: 'CASCADE',
+    })
     product:Product;
 }
