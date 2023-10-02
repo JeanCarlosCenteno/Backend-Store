@@ -1,5 +1,4 @@
-import { Controller, Post, Get, Res, Param, UseInterceptors, UploadedFile,BadRequestException }
-from '@nestjs/common';
+import { Controller, Post, Get, Res, Param, UseInterceptors, UploadedFile,BadRequestException }from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { fileFilter } from 'src/helpers/fileFilter.helper';
@@ -22,6 +21,7 @@ export class FilesController {
             destination: './static/products/',
             filename: fileNamer,
         })
+    
     }))
     uploadImage(@UploadedFile() file: Express.Multer.File){
         if(!file) {
@@ -37,5 +37,13 @@ export class FilesController {
 
         // return path;
         res.sendFile(path);
+    }
+    @Get('user/:imageName')
+    findUser(@Res() res:Response, @Param('imageName')imageName:string) {
+        const path = this.filesService.getStaticImageName(imageName);
+    
+            //return path;
+            res.sendFile(path);
+            return path;
     }
 }

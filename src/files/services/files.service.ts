@@ -18,4 +18,17 @@ export class FilesService {
         // Si existe la imagen entonces que la retorne
         return path;
     }
+
+    getStaticImageNameuser(imageName: string) {
+        // Agregando la ruta para encontrar el archivo
+            const path = join(__dirname, '../../../static/user', imageName);
+    
+            if (!existsSync(path)) {
+                throw new BadRequestException(
+                `No existe un producto con la imagen ${imageName}`,
+                );
+            }
+            // Si existe la imagen entonces que la retorne
+            return path;
+    }
 }
