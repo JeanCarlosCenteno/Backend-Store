@@ -9,5 +9,6 @@ import { UserImage } from './entities/user-image.entity';
   imports: [TypeOrmModule.forFeature([User,UserImage])],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [TypeOrmModule, UsersModule],
 })
 export class UsersModule {}

@@ -10,7 +10,7 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', length: 30, nullable: false })
+  @Column({ type: 'varchar',nullable: true })
   password: string;
 
   @Column({ type: 'varchar', nullable: false })
@@ -21,6 +21,9 @@ export class User {
 
   @Column({ type: 'boolean', default: true })
   active: boolean;
+
+  @Column({ type: 'text', array: true, default: ['user'] })
+  roles: string[];
   
     //
     autor:User;
